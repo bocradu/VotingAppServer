@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-var topicsSchema = mongoose.Schema({
+const mongoose = require("mongoose");
+const topicsSchema = mongoose.Schema({
   name: String,
   id: String,
   options: [
@@ -10,5 +10,5 @@ var topicsSchema = mongoose.Schema({
   startDate: Date,
   endDate: Date
 });
-var Topics = mongoose.model("Topics", topicsSchema);
+const Topics = mongoose.model("Topics", topicsSchema);
 module.exports = { Topics };
