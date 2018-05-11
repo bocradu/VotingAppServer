@@ -1,8 +1,8 @@
-FROM node:4.6
+FROM node:carbon
 
-RUN mkdir /naivechain
-ADD package.json /naivechain/
-ADD main.js /naivechain/
+RUN mkdir -p /naivechain
+WORKDIR /naivechain
+ADD . /naivechain
 
 RUN cd /naivechain && npm install
 

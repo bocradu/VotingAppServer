@@ -1,4 +1,4 @@
 module.exports = {
-  mongoServer: "localhost",
+  mongoServer: "mongo",
   mongoPort: "27017"
 };
