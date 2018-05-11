@@ -13,8 +13,13 @@ topicsRouter.post("/", (req, res) => {
     startDate: new Date(),
     endDate: new Date()
   });
-  topic.save();
-  res.send(topic);
+  newUser.save(function(err) {
+    if (err) {
+      res.status(500).send("Server Error");
+    }
+    res.send(topic);
+  });
+  
 });
 
 module.exports = { topicsRouter };
