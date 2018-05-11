@@ -58,3 +58,33 @@ curl -H "Content-type:application/json" --data '{"peer" : "ws://localhost:6001"}
 ```
 curl http://localhost:3001/peers
 ```
+
+
+API
+Endpoints:
+
+GET /topics
+POST /topics
+{
+    name: String,
+    id: String,
+    options: [String],
+    startDate: Date,
+    endDate: Date
+}
+
+GET /voting/check/:topicId/:userId
+
+POST /voting
+{
+  topicId: String,
+  userId: String,
+  option: Stirng  
+}
+
+GET /results/:topicId
+{
+    topicId: String,
+    option: [{name: String, count: number}],
+
+}
