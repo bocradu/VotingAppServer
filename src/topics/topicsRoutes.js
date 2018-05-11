@@ -3,7 +3,7 @@ const { Topics } = require("./topicsModel");
 const topicsRouter = Router();
 
 topicsRouter.get("/", (req, res) => {
-  Topics.find({}).then(topics => res.json(topics));
+  Topics.find({}, topics => res.json(topics));
 });
 topicsRouter.post("/", (req, res) => {
   const topic = new Topics({
@@ -14,6 +14,7 @@ topicsRouter.post("/", (req, res) => {
     endDate: new Date()
   });
   topic.save();
+  res.send(topic);
 });
 
 module.exports = { topicsRouter };

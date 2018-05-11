@@ -3,7 +3,7 @@ var CryptoJS = require("crypto-js");
 var express = require("express");
 var bodyParser = require("body-parser");
 var WebSocket = require("ws");
-const { topicsRouter } = require("./topicsRoutes");
+const { topicsRouter } = require("./src/topics/topicsRoutes");
 
 var db = require("./db");
 
