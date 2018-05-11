@@ -3,7 +3,7 @@ const { Topics } = require("./topicsModel");
 const topicsRouter = Router();
 
 topicsRouter.get("/", (req, res) => {
-  Topics.find({}).then(topics => res.json(topcs));
+  Topics.find({}).then(topics => res.json(topics));
 });
 topicsRouter.post("/", (req, res) => {
   const topic = new Topics({
