@@ -43,7 +43,18 @@ var blockchain = [getGenesisBlock()];
 var initHttpServer = () => {
   var app = express();
   app.use(bodyParser.json());
-
+  app.use(function(req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "POST,GET,OPTIONS,PUT,DELETE"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Authorization, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Headers, Access-Control-Allow-Origin"
+    );
+    next();
+  });
   app.get("/blocks", (req, res) => res.send(JSON.stringify(blockchain)));
   app.post("/mineBlock", (req, res) => {
     var newBlock = generateNextBlock(req.body.data);

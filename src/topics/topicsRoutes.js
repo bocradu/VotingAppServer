@@ -3,7 +3,7 @@ const { Topics } = require("./topicsModel");
 const topicsRouter = Router();
 
 topicsRouter.get("/", (req, res) => {
-  Topics.find({}, topics => res.json(topics));
+  Topics.find({}).then(topics => res.json(topics));
 });
 topicsRouter.post("/", (req, res) => {
   const topic = new Topics({
@@ -13,13 +13,12 @@ topicsRouter.post("/", (req, res) => {
     startDate: new Date(),
     endDate: new Date()
   });
-  newUser.save(function(err) {
+  topic.save(function(err) {
     if (err) {
       res.status(500).send("Server Error");
     }
     res.send(topic);
   });
-  
 });
 
 module.exports = { topicsRouter };
