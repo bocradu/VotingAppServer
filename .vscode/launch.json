@@ -1,0 +1,22 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}\\main.js",
+      "env": {
+        "REALM": "http://localhost:3001",
+        "APP_REALM": "http://localhost:3000",
+        "AZURE_ACTIVE_DIRECTORY_TENANT_ID": "88d0a5a9-d61a-4dd6-9a75-6637f3fe6bd8",
+        "AZURE_ACTIVE_DIRECTORY_CLIENT_ID": "e92f8934-91c1-4fe1-aa7a-5bb4d866a7fe",
+        "AZURE_ACTIVE_DIRECTORY_SECRET_KEY": "bnbOTQQ3722|;bcfjMZW2+#",
+        "USE_HTTP": "true"
+      }
+    }
+  ]
+}
