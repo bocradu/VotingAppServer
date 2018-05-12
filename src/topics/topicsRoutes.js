@@ -1,12 +1,11 @@
 const { Router } = require("express");
 const { Topics } = require("./topicsModel");
-const { check } = require("../../auth-openid");
 const topicsRouter = Router();
 
 topicsRouter.get("/", (req, res) => {
   Topics.find({}).then(topics => res.json(topics));
 });
-topicsRouter.post("/", check, (req, res) => {
+topicsRouter.post("/", (req, res) => {
   const topic = new Topics({
     name: req.body.name,
     id: req.body.id,

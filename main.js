@@ -6,8 +6,9 @@ var WebSocket = require("ws");
 var moment = require("moment");
 
 const { topicsRouter } = require("./src/topics/topicsRoutes");
-const { authRouter } = require("./auth-openid");
+
 const { Topics } = require("./src/topics/topicsModel");
+
 
 var db = require("./db");
 
@@ -61,14 +62,11 @@ var initHttpServer = () => {
   });
 
   app.get("/voting/check/:topicId/:userId", (req, res) => {
-    const filtered = blockchain.filter(
-      item =>
-        item.data.userId === req.params.userId &&
-        item.data.topicId === req.params.topicId
-    );
+	const filtered = blockchain.filter(item => 
+		item.data.userId === req.params.userId && item.data.topicId === req.params.topicId)
 
-    res.send(JSON.stringify(filtered));
-  });
+	res.send(JSON.stringify(filtered))
+});
 
 app.post("/voting/:cnp", (req, res) => {
 	const infoCNP = getInfoCNP(req.params.cnp)
@@ -91,29 +89,27 @@ app.post("/voting/:cnp", (req, res) => {
 	}
   });
 
-  app.get("/results/:topicId", (req, res) => {
-    const filtered = blockchain.filter(
-      item => item.data.topicId === req.params.topicId
-    );
-    let results = [];
+app.get("/results/:topicId", (req, res) => {
+	const filtered = blockchain.filter(item => item.data.topicId === req.params.topicId)
+	let results = []
 
-    const votingData = filtered.map(item => item.data);
-    const possibleOptions = [...new Set(votingData.map(item => item.option))];
+	const votingData = filtered.map(item => item.data)
+	const possibleOptions = [...new Set(votingData.map(item => item.option))];
 
-    for (const option of possibleOptions) {
-      let count = 0;
+	for (const option of possibleOptions) {
+		let count = 0
 
-      for (const vote of votingData) {
-        if (option === vote.option) {
-          count++;
-        }
-      }
+		for (const vote of votingData) {
+			if (option === vote.option) {
+				count++
+			}
+		}
 
-      results.push({
-        name: option,
-        count
-      });
-    }
+		results.push({
+			name: option,
+			count
+		})
+	}
 
 	Topics.find({ id: req.params.topicId }, function(err, voting) {
 		if (err)
@@ -145,7 +141,6 @@ app.post("/voting/:cnp", (req, res) => {
     res.send();
   });
   app.use("/topics", topicsRouter);
-  app.use("/", authRouter);
   app.listen(http_port, () =>
     console.log("Listening http on port: " + http_port)
   );
