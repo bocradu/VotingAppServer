@@ -73,7 +73,7 @@ var initHttpServer = () => {
 app.post("/voting/:cnp", (req, res) => {
 	const infoCNP = getInfoCNP(req.params.cnp)
 
-	const newBlock = generateNextBlock({...req.body.data, ...infoCNP});
+	const newBlock = generateNextBlock({...req.body, ...infoCNP});
 
     addBlock(newBlock);
     broadcast(responseLatestMsg());
