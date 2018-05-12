@@ -12,7 +12,7 @@ topicsRouter.post("/", check, (req, res) => {
     id: req.body.id,
     options: req.body.options,
     startDate: new Date(),
-    endDate: new Date()
+    endDate: req.body.endDate
   });
   topic.save(function(err) {
     if (err) {
