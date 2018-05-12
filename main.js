@@ -73,14 +73,22 @@ var initHttpServer = () => {
 app.post("/voting/:cnp", (req, res) => {
 	const infoCNP = getInfoCNP(req.params.cnp)
 
-	const newBlock = generateNextBlock({...req.body, ...infoCNP});
+	const alreadyVoted = blockchain.filter(item => item.data.userId === req.body.userId && item.data.topicId === req.body.topicId)
 
-    addBlock(newBlock);
-    broadcast(responseLatestMsg());
+	if (alreadyVoted.length === 0) {
+		const newBlock = generateNextBlock({...req.body, ...infoCNP});
 
-    console.log("block added: " + JSON.stringify(newBlock));
+		addBlock(newBlock);
+		broadcast(responseLatestMsg());
 
-    res.send();
+		console.log("block added: " + JSON.stringify(newBlock));
+
+		res.send(alreadyVoted);
+	}
+	else {
+		res.status(401)
+		res.send('Already voted!')
+	}
   });
 
   app.get("/results/:topicId", (req, res) => {
@@ -113,7 +121,7 @@ app.post("/voting/:cnp", (req, res) => {
 
 		res.send(JSON.stringify({
 			topicId: req.params.topicId,
-			topicName: voting[0].name,
+			topicName: voting[0].name || '',
 			options: results
 		}))
 	});
