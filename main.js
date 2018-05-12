@@ -6,6 +6,7 @@ var WebSocket = require("ws");
 var moment = require("moment");
 
 const { topicsRouter } = require("./src/topics/topicsRoutes");
+const { Topics } = require("./src/topics/topicsModel");
 
 var db = require("./db");
 
@@ -100,10 +101,16 @@ app.get("/results/:topicId", (req, res) => {
 		})
 	}
 
-	res.send(JSON.stringify({
-		topicId: req.params.topicId,
-		options: results
-	}))
+	Topics.find({ id: req.params.topicId }, function(err, voting) {
+		if (err)
+			res.send(err);
+
+		res.send(JSON.stringify({
+			topicId: req.params.topicId,
+			topicName: voting[0].name,
+			options: results
+		}))
+	});
 });
 
   app.get("/blocks", (req, res) => res.send(JSON.stringify(blockchain)));
