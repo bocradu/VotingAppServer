@@ -1,14 +1,19 @@
 version: '2'
 services:
   node1:
+    environment:
+      - MONGO_SERVER=mongo
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
     - "3001:3001"
+    depends_on:
+      - mongo
   node2:
     environment:
       - PEERS=ws://node1:6001
+      - MONGO_SERVER=mongo
     build:
       context: ./
       dockerfile: Dockerfile
@@ -16,9 +21,12 @@ services:
     - "3002:3001"
     links:
       - node1:node1
+    depends_on:
+      - mongo
   node3:
     environment:
       - PEERS=ws://node2:6001
+      - MONGO_SERVER=mongo
     build:
       context: ./
       dockerfile: Dockerfile
@@ -26,9 +34,21 @@ services:
     - "3003:3001"
     links:
       - node2:node2
+    depends_on:
+      - mongo
   mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+        image: mongo:3.4.5
+        container_name: "mongo"
+        environment:
+          - AUTH=no
+          - MONGO_DATA_DIR=/data/db
+          - MONGO_LOG_DIR=/dev/null
+          - MONGODB_USER="root" 
+          - MONGODB_PASS="root"
+        volumes:
+          - data:/data/db
+        ports:
+            - 27017:27017
+        command: mongod --smallfiles
+volumes:
+  data:
