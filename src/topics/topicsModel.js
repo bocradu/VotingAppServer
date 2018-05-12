@@ -9,6 +9,7 @@ const topicsSchema = mongoose.Schema({
   ],
   startDate: Date,
   endDate: Date
-});
-const Topics = mongoose.model("Topics", topicsSchema);
+}, { collection: 'Voting' });
+
+const Topics = mongoose.model("Voting", topicsSchema);
 module.exports = { Topics };

@@ -1,4 +1,6 @@
 module.exports = {
-  mongoServer: process.env.MONGO_SERVER || "localhost",
-  mongoPort: "27017"
-};
+	// needs to be set to mongo when deployed on azure
+	mongoServer: process.env.mongoServer || "localhost",
+	mongoPort: process.env.mongoPort || "27017"
+  };
+  

@@ -55,6 +55,53 @@ var initHttpServer = () => {
     );
     next();
   });
+
+  app.get("/voting/check/:topicId/:userId", (req, res) => {
+	const filtered = blockchain.filter(item => 
+		item.data.userId === req.params.userId && item.data.topicId === req.params.topicId)
+
+	res.send(JSON.stringify(filtered))
+});
+
+app.post("/voting", (req, res) => {
+	const newBlock = generateNextBlock(req.body.data);
+
+	addBlock(newBlock);
+	broadcast(responseLatestMsg());
+
+	console.log("block added: " + JSON.stringify(newBlock));
+
+	res.send();
+});
+
+app.get("/results/:topicId", (req, res) => {
+	const filtered = blockchain.filter(item => item.data.topicId === req.params.topicId)
+	let results = []
+
+	const votingData = filtered.map(item => item.data)
+	const possibleOptions = [...new Set(votingData.map(item => item.option))];
+
+	for (const option of possibleOptions) {
+		let count = 0
+
+		for (const vote of votingData) {
+			if (option === vote.option) {
+				count++
+			}
+		}
+
+		results.push({
+			name: option,
+			count
+		})
+	}
+
+	res.send(JSON.stringify({
+		topicId: req.params.topicId,
+		options: results
+	}))
+});
+
   app.get("/blocks", (req, res) => res.send(JSON.stringify(blockchain)));
   app.post("/mineBlock", (req, res) => {
     var newBlock = generateNextBlock(req.body.data);
