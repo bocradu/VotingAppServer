@@ -115,7 +115,7 @@ app.post("/voting/:cnp", (req, res) => {
       });
     }
 
-	Topics.find({ id: req.params.topicId }, function(err, voting) {
+	Topics.find({ _id: req.params.topicId }, function(err, voting) {
 		if (err)
 			res.send(err);
 
