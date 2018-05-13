@@ -70,25 +70,28 @@ var initHttpServer = () => {
     res.send(JSON.stringify(filtered));
   });
 
-app.post("/voting/:cnp", (req, res) => {
-	const infoCNP = getInfoCNP(req.params.cnp)
+  app.post("/voting/:cnp", (req, res) => {
+    const infoCNP = getInfoCNP(req.params.cnp);
 
-	const alreadyVoted = blockchain.filter(item => item.data.userId === req.body.userId && item.data.topicId === req.body.topicId)
+    const alreadyVoted = blockchain.filter(
+      item =>
+        item.data.userId === req.body.userId &&
+        item.data.topicId === req.body.topicId
+    );
 
-	if (alreadyVoted.length === 0) {
-		const newBlock = generateNextBlock({...req.body, ...infoCNP});
+    if (alreadyVoted.length === 0) {
+      const newBlock = generateNextBlock({ ...req.body, ...infoCNP });
 
-		addBlock(newBlock);
-		broadcast(responseLatestMsg());
+      addBlock(newBlock);
+      broadcast(responseLatestMsg());
 
-		console.log("block added: " + JSON.stringify(newBlock));
+      console.log("block added: " + JSON.stringify(newBlock));
 
-		res.send(alreadyVoted);
-	}
-	else {
-		res.status(401)
-		res.send('Already voted!')
-	}
+      res.send(alreadyVoted);
+    } else {
+      res.status(401);
+      res.send("Already voted!");
+    }
   });
 
   app.get("/results/:topicId", (req, res) => {
@@ -115,25 +118,26 @@ app.post("/voting/:cnp", (req, res) => {
       });
     }
 
-	Topics.find({ _id: req.params.topicId }, function(err, voting) {
-		if (err)
-			res.send(err);
+    Topics.findById(req.params.topicId, function(err, voting) {
+      if (err) res.send(err);
+      else {
+        if (voting) {
+          const topicName = voting.name || "";
 
-		if (voting.length > 0) {
-			const topicName = voting[0].name || ''
-
-			res.send(JSON.stringify({
-				topicId: req.params.topicId,
-				topicName: topicName,
-				options: results
-			}))
-		}
-		else {
-			res.status(401)
-			res.send('No data in mongo?')
-		}
-	});
-});
+          res.send(
+            JSON.stringify({
+              topicId: req.params.topicId,
+              topicName: topicName,
+              options: results
+            })
+          );
+        } else {
+          res.status(401);
+          res.send("No data in mongo?");
+        }
+      }
+    });
+  });
 
   app.get("/blocks", (req, res) => res.send(JSON.stringify(blockchain)));
   app.post("/mineBlock", (req, res) => {
@@ -153,7 +157,7 @@ app.post("/voting/:cnp", (req, res) => {
     res.send();
   });
   app.use("/topics", topicsRouter);
-//   app.use("/", authRouter);
+  //   app.use("/", authRouter);
   app.listen(http_port, () =>
     console.log("Listening http on port: " + http_port)
   );
@@ -342,86 +346,95 @@ var responseLatestMsg = () => ({
 var write = (ws, message) => ws.send(JSON.stringify(message));
 var broadcast = message => sockets.forEach(socket => write(socket, message));
 
-const getInfoCNP = (cnp) => {
-	let year = 0;
-	const countyCodes = {
-		'01': 'Alba',
-        '02': 'Arad',
-        '03': 'Arges',
-        '04': 'Bacau',
-        '05': 'Bihor',
-        '06': 'Bistrita-Nasaud',
-        '07': 'Botosani',
-        '08': 'Brasov',
-        '09': 'Braila',
-        '10': 'Buzau',
-        '11': 'Caras-Severin',
-        '12': 'Cluj',
-        '13': 'Constanta',
-        '14': 'Covasna',
-        '15': 'Dambovita',
-        '16': 'Dolj',
-        '17': 'Galati',
-        '18': 'Gorj',
-        '19': 'Harghita',
-        '20': 'Hunedoara',
-        '21': 'Ialomita',
-        '22': 'Iasi',
-        '23': 'Ilfov',
-        '24': 'Maramures',
-        '25': 'Mehedinti',
-        '26': 'Mures',
-        '27': 'Neamt',
-        '28': 'Olt',
-        '29': 'Prahova',
-        '30': 'Satu Mare',
-        '31': 'Salaj',
-        '32': 'Sibiu',
-        '33': 'Suceava',
-        '34': 'Teleorman',
-        '35': 'Timis',
-        '36': 'Tulcea',
-        '37': 'Vaslui',
-        '38': 'Valcea',
-        '39': 'Vrancea',
-        '40': 'Bucuresti',
-        '41': 'Bucuresti S.1',
-        '42': 'Bucuresti S.2',
-        '43': 'Bucuresti S.3',
-        '44': 'Bucuresti S.4',
-        '45': 'Bucuresti S.5',
-        '46': 'Bucuresti S.6',
-        '51': 'Calarasi',
-        '52': 'Giurgiu'
-	}
+const getInfoCNP = cnp => {
+  let year = 0;
+  const countyCodes = {
+    "01": "Alba",
+    "02": "Arad",
+    "03": "Arges",
+    "04": "Bacau",
+    "05": "Bihor",
+    "06": "Bistrita-Nasaud",
+    "07": "Botosani",
+    "08": "Brasov",
+    "09": "Braila",
+    "10": "Buzau",
+    "11": "Caras-Severin",
+    "12": "Cluj",
+    "13": "Constanta",
+    "14": "Covasna",
+    "15": "Dambovita",
+    "16": "Dolj",
+    "17": "Galati",
+    "18": "Gorj",
+    "19": "Harghita",
+    "20": "Hunedoara",
+    "21": "Ialomita",
+    "22": "Iasi",
+    "23": "Ilfov",
+    "24": "Maramures",
+    "25": "Mehedinti",
+    "26": "Mures",
+    "27": "Neamt",
+    "28": "Olt",
+    "29": "Prahova",
+    "30": "Satu Mare",
+    "31": "Salaj",
+    "32": "Sibiu",
+    "33": "Suceava",
+    "34": "Teleorman",
+    "35": "Timis",
+    "36": "Tulcea",
+    "37": "Vaslui",
+    "38": "Valcea",
+    "39": "Vrancea",
+    "40": "Bucuresti",
+    "41": "Bucuresti S.1",
+    "42": "Bucuresti S.2",
+    "43": "Bucuresti S.3",
+    "44": "Bucuresti S.4",
+    "45": "Bucuresti S.5",
+    "46": "Bucuresti S.6",
+    "51": "Calarasi",
+    "52": "Giurgiu"
+  };
 
-	const gender = cnp.slice(0, 1) % 2 === 0 ? 'female' : 'male'
-	const isForeign = cnp.slice(0, 1) === 7 && cnp.slice(0, 1) === 8 ? true : false
-	
-	switch(Number(cnp.slice(0, 1))) {
-		case 0 : case 1 :
-			year = 1900 + Number(cnp.slice(1, 3))
-		case 3 : case 4 :
-			year = 1800 + Number(cnp.slice(1, 3))
-		case 5 : case 6 :
-			year = 2000 + Number(cnp.slice(1, 3))
-		case 7 : case 8 : case 9 :
-			year = 1900 + Number(cnp.slice(1, 3)) //assuming
-	}
+  const gender = cnp.slice(0, 1) % 2 === 0 ? "female" : "male";
+  const isForeign =
+    cnp.slice(0, 1) === 7 && cnp.slice(0, 1) === 8 ? true : false;
 
-	const countyCode = countyCodes[cnp.slice(7, 9)]
+  switch (Number(cnp.slice(0, 1))) {
+    case 0:
+    case 1:
+      year = 1900 + Number(cnp.slice(1, 3));
+    case 3:
+    case 4:
+      year = 1800 + Number(cnp.slice(1, 3));
+    case 5:
+    case 6:
+      year = 2000 + Number(cnp.slice(1, 3));
+    case 7:
+    case 8:
+    case 9:
+      year = 1900 + Number(cnp.slice(1, 3)); //assuming
+  }
 
-	const dateOfBirth = moment(`${cnp.slice(5, 7)}-${cnp.slice(3, 5)}-${year}`, 'DD-MM-YYYY')
-	const a = `${cnp.slice(5, 7)}-${cnp.slice(3, 5)}-${year}`
-	
-	return({
-		hashedCNP: CryptoJS.SHA256(cnp).toString(),
-		gender,
-		isForeign,
-		countyCode,
-		dateOfBirth
-	})
-}
+  const countyCode = countyCodes[cnp.slice(7, 9)];
+
+  const dateOfBirth = moment(
+    `${cnp.slice(5, 7)}-${cnp.slice(3, 5)}-${year}`,
+    "DD-MM-YYYY"
+  );
+  const a = `${cnp.slice(5, 7)}-${cnp.slice(3, 5)}-${year}`;
+
+  return {
+    hashedCNP: CryptoJS.SHA256(cnp).toString(),
+    gender,
+    isForeign,
+    countyCode,
+    dateOfBirth
+  };
+};
 
 connectToPeers(initialPeers);
 initHttpServer();
