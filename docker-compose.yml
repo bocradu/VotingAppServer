@@ -3,6 +3,12 @@ services:
   node1:
     environment:
       - MONGO_SERVER=mongo
+      - REALM=http://localhost:3001
+      - APP_REALM=http://localhost:3000,
+      - AZURE_ACTIVE_DIRECTORY_TENANT_ID=88d0a5a9-d61a-4dd6-9a75-6637f3fe6bd8,
+      - AZURE_ACTIVE_DIRECTORY_CLIENT_ID=e92f8934-91c1-4fe1-aa7a-5bb4d866a7fe,
+      - AZURE_ACTIVE_DIRECTORY_SECRET_KEY=bnbOTQQ3722|;bcfjMZW2+#,
+      - USE_HTTP=true
     build:
       context: ./
       dockerfile: Dockerfile
@@ -13,7 +19,13 @@ services:
   node2:
     environment:
       - PEERS=ws://node1:6001
-      - MONGO_SERVER=mongo
+        - MONGO_SERVER=mongo
+      - REALM=http://localhost:3001
+      - APP_REALM=http://localhost:3000,
+      - AZURE_ACTIVE_DIRECTORY_TENANT_ID=88d0a5a9-d61a-4dd6-9a75-6637f3fe6bd8,
+      - AZURE_ACTIVE_DIRECTORY_CLIENT_ID=e92f8934-91c1-4fe1-aa7a-5bb4d866a7fe,
+      - AZURE_ACTIVE_DIRECTORY_SECRET_KEY=bnbOTQQ3722|;bcfjMZW2+#,
+      - USE_HTTP=true
     build:
       context: ./
       dockerfile: Dockerfile
@@ -27,6 +39,12 @@ services:
     environment:
       - PEERS=ws://node2:6001
       - MONGO_SERVER=mongo
+      - REALM=http://localhost:3001
+      - APP_REALM=http://localhost:3000,
+      - AZURE_ACTIVE_DIRECTORY_TENANT_ID=88d0a5a9-d61a-4dd6-9a75-6637f3fe6bd8,
+      - AZURE_ACTIVE_DIRECTORY_CLIENT_ID=e92f8934-91c1-4fe1-aa7a-5bb4d866a7fe,
+      - AZURE_ACTIVE_DIRECTORY_SECRET_KEY=bnbOTQQ3722|;bcfjMZW2+#,
+      - USE_HTTP=true
     build:
       context: ./
       dockerfile: Dockerfile

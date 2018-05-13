@@ -16,7 +16,7 @@ const config = {
 
 module.exports = {
   // needs to be set to mongo when deployed on azure
-  mongoServer: process.env.mongoServer || "localhost",
+  mongoServer: process.env.mongoServer || "mongo",
   mongoPort: process.env.mongoPort || "27017",
   config
 };

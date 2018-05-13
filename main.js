@@ -119,11 +119,19 @@ app.post("/voting/:cnp", (req, res) => {
 		if (err)
 			res.send(err);
 
-		res.send(JSON.stringify({
-			topicId: req.params.topicId,
-			topicName: voting[0].name || '',
-			options: results
-		}))
+		if (voting.length > 0) {
+			const topicName = voting[0].name || ''
+
+			res.send(JSON.stringify({
+				topicId: req.params.topicId,
+				topicName: topicName,
+				options: results
+			}))
+		}
+		else {
+			res.status(401)
+			res.send('No data in mongo?')
+		}
 	});
 });
 
