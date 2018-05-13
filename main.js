@@ -153,7 +153,7 @@ app.post("/voting/:cnp", (req, res) => {
     res.send();
   });
   app.use("/topics", topicsRouter);
-  app.use("/", authRouter);
+//   app.use("/", authRouter);
   app.listen(http_port, () =>
     console.log("Listening http on port: " + http_port)
   );
